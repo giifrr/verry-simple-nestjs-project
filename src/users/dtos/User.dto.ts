@@ -9,3 +9,8 @@ export class UpdateUserDto {
   password: string;
 }
 
+export class UpdateUserProfileDto {
+  firstName: string;
+  lastName: string;
+  address: string
+}

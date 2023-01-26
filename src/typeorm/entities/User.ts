@@ -1,4 +1,5 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Profile } from "./Profile";
 
 @Entity({name: 'users'})
 export class User {
@@ -16,4 +17,8 @@ export class User {
 
   @CreateDateColumn()
   createdAt: Date;
+
+  @OneToOne(() => Profile)
+  @JoinColumn()
+  profile: Profile;
 }
