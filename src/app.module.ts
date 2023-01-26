@@ -3,6 +3,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
+import { User } from './typeorm/entities/User';
 
 @Module({
   imports: [
@@ -13,7 +14,7 @@ import { UsersModule } from './users/users.module';
       username: 'root',
       password: 'root',
       database: 'belajar_nestjs',
-      entities: [],
+      entities: [User],
       synchronize: true
     }),
     UsersModule
