@@ -14,3 +14,8 @@ export class UpdateUserProfileDto {
   lastName: string;
   address: string
 }
+
+export class CreateUserPostDto {
+  title: string;
+  description: string;
+}

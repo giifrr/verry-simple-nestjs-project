@@ -1,19 +1,21 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Post } from 'src/typeorm/entities/Post';
 import { Profile } from 'src/typeorm/entities/Profile';
 import { User } from 'src/typeorm/entities/User';
-import { CreateUserDto, UpdateUserDto, UpdateUserProfileDto } from 'src/users/dtos/User.dto';
+import { CreateUserDto, CreateUserPostDto, UpdateUserDto, UpdateUserProfileDto } from 'src/users/dtos/User.dto';
 import { Repository } from 'typeorm';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User) private userRepository: Repository<User>,
-    @InjectRepository(Profile) private profileRepository: Repository<Profile>
+    @InjectRepository(Profile) private profileRepository: Repository<Profile>,
+    @InjectRepository(Post) private postRepository: Repository<Post>
   ) {}
 
   index() {
-    return this.userRepository.find();
+    return this.userRepository.find({ relations: ['profile'] });
   }
 
   show(id: number) {
@@ -68,5 +70,18 @@ export class UsersService {
     user.profile = savedProfile;
 
     return this.userRepository.save(user);
+  }
+
+  async createUserPost(id: number, body: CreateUserPostDto) {
+    let user = await this.userRepository.findOneBy({id});
+
+    if (!user) throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+
+    let newPost = this.postRepository.create({
+      ...body,
+      user
+    })
+
+    return this.postRepository.save(newPost);
   }
 }
